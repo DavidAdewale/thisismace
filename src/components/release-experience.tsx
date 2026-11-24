@@ -25,6 +25,9 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
+const tagline = "Lagos lover boy music";
+const stickerText = `Mace world • ${tagline} • `;
+
 function EarlyState() {
   return (
     <>
@@ -34,7 +37,7 @@ function EarlyState() {
         <p className="hero-line">I&apos;m only just getting started.</p>
         <EmailSignup source="early" heading="Want the first clue?" buttonLabel="Keep me close" note="No noise. Just the good stuff." />
       </div>
-      <Portrait photo={phasePhotos.early} chip="Something’s coming" badge="Mace world • Lagos to everywhere • " />
+      <Portrait photo={phasePhotos.early} chip="Something’s coming" badge={stickerText} />
     </>
   );
 }
@@ -53,7 +56,7 @@ function PresaveState() {
         )}
         <EmailSignup source="presave" heading="Rather hear it from me?" buttonLabel="Tell me when it drops" />
       </div>
-      <Portrait photo={phasePhotos.presave} chip="WBDG · 12.02.27" badge="Mace world • Who Be Dat Girl? • " />
+      <Portrait photo={phasePhotos.presave} chip="WBDG · 12.02.27" badge={stickerText} />
     </>
   );
 }
@@ -81,16 +84,16 @@ function ReleasedState() {
         </nav>
         <EmailSignup source="released" heading="Stay close." buttonLabel="Let me in" note="There’s more after this." />
       </div>
-      <Sleeve artwork={currentRelease.artwork} badge="Out now • Who Be Dat Girl? • " />
+      <Sleeve artwork={currentRelease.artwork} badge={stickerText} />
     </>
   );
 }
 
 // The song title only appears once pre-save has started.
 const marqueeWords: Record<ReleasePhase, string[]> = {
-  early: ["Mace world", "Something’s coming", "Lagos to everywhere", "Good music loading"],
-  presave: ["Mace world", "Who Be Dat Girl?", "Lagos to everywhere", "12.02.27"],
-  released: ["Mace world", "Who Be Dat Girl?", "Lagos to everywhere", "Out now"],
+  early: ["Mace world", "Something’s coming", tagline, "Good music loading"],
+  presave: ["Mace world", "Who Be Dat Girl?", tagline, "12.02.27"],
+  released: ["Mace world", "Who Be Dat Girl?", tagline, "Out now"],
 };
 
 export function ReleaseExperience({ phase }: { phase: ReleasePhase }) {

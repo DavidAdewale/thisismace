@@ -197,6 +197,7 @@ export function Tracking() {
   const [analytics, setAnalytics] = useState(false);
   const [advertising, setAdvertising] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [customise, setCustomise] = useState(false);
 
   useEffect(() => {
     function click(event: MouseEvent) {
@@ -265,18 +266,52 @@ export function Tracking() {
     sync();
   }
 
+  const adVendors = [meta && "Meta", tiktok && "TikTok"].filter(Boolean).join(" and ");
+
   return (
     <div className="site-privacy">
       <a href="/privacy">Privacy</a>
-      {visible && <button type="button" aria-expanded={open} onClick={() => setOpen(!open)}>Cookie settings</button>}
+      {visible && <button type="button" className="cookie-link" aria-expanded={open} onClick={() => { setCustomise(false); setOpen(!open); }}>Cookie settings</button>}
       {visible && open && (
-        <section className="cookie-panel" aria-label="Cookie preferences">
-          <p>Choose whether to allow analytics and advertising cookies. You can change this anytime.</p>
-          {ga && <label><input type="checkbox" checked={analytics} onChange={(e) => setAnalytics(e.target.checked)} /> Analytics (Google)</label>}
-          {(meta || tiktok) && <label><input type="checkbox" checked={advertising} onChange={(e) => setAdvertising(e.target.checked)} /> Advertising ({[meta && "Meta", tiktok && "TikTok"].filter(Boolean).join(" and ")})</label>}
-          <div>
-            <button type="button" onClick={() => save({ analytics: false, advertising: false })}>Reject optional</button>
-            <button type="button" onClick={() => save({ analytics, advertising })}>Save choices</button>
+        <section className="cookie-panel" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+          <p className="cookie-kicker"><span aria-hidden="true">✦</span> Your call</p>
+          <h2 id="cookie-title">A few cookies?</h2>
+          <p id="cookie-text">They help Mace see what’s landing and reach more people like you. Nothing loads unless you say yes, and you can change your mind anytime.</p>
+
+          {customise && (
+            <div className="cookie-options">
+              {ga && (
+                <label className="cookie-option">
+                  <span><strong>Analytics</strong><small>Google · how people find and use the site</small></span>
+                  <input type="checkbox" role="switch" checked={analytics} onChange={(e) => setAnalytics(e.target.checked)} />
+                  <i className="cookie-switch" aria-hidden="true" />
+                </label>
+              )}
+              {(meta || tiktok) && (
+                <label className="cookie-option">
+                  <span><strong>Advertising</strong><small>{adVendors} · helps Mace’s ads find the right people</small></span>
+                  <input type="checkbox" role="switch" checked={advertising} onChange={(e) => setAdvertising(e.target.checked)} />
+                  <i className="cookie-switch" aria-hidden="true" />
+                </label>
+              )}
+            </div>
+          )}
+
+          <div className="cookie-actions">
+            {customise ? (
+              <button type="button" className="cookie-primary" onClick={() => save({ analytics, advertising })}>Save choices</button>
+            ) : (
+              <>
+                <button type="button" className="cookie-primary" onClick={() => save({ analytics: Boolean(ga), advertising: Boolean(meta || tiktok) })}>Accept all</button>
+                <button type="button" className="cookie-secondary" onClick={() => save({ analytics: false, advertising: false })}>Reject</button>
+              </>
+            )}
+          </div>
+          <div className="cookie-footer">
+            {customise
+              ? <button type="button" onClick={() => setCustomise(false)}>Back</button>
+              : <button type="button" onClick={() => setCustomise(true)}>Choose what to allow</button>}
+            <a href="/privacy">Privacy</a>
           </div>
         </section>
       )}
