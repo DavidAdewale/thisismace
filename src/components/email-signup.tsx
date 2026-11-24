@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { signupAttribution, trackSignup } from "@/components/tracking";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -34,11 +35,15 @@ export function EmailSignup({
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [isNew, setIsNew] = useState(false);
+  const submitting = useRef(false);
   const openedAt = useRef(0);
   useEffect(() => { openedAt.current = Date.now(); }, []);
 
   async function subscribe(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     setStatus("submitting");
     setMessage("");
 
@@ -54,11 +59,14 @@ export function EmailSignup({
           name: formData.get("name"),
           email: formData.get("email"),
           source,
+          attribution: signupAttribution(),
           elapsed: openedAt.current ? Date.now() - openedAt.current : undefined,
         }),
       });
       const result = await response.json();
       if (response.ok) {
+        setIsNew(result.created === true);
+        if (result.created === true) trackSignup(source === "circle" ? "circle" : "release_hero");
         setFirstName(name);
         setStatus("success");
         form.reset();
@@ -69,6 +77,8 @@ export function EmailSignup({
     } catch {
       setStatus("error");
       setMessage("That didn’t go through. Try again in a moment.");
+    } finally {
+      submitting.current = false;
     }
   }
 
@@ -77,8 +87,7 @@ export function EmailSignup({
       <div className="signup signup-done" id="email" role="status" aria-live="polite">
         <HeartBurst />
         <p className="signup-heading">{firstName ? <>You’re in, <span>{firstName}</span>.</> : <>You’re in.</>}</p>
-        <p className="signup-note">Check your inbox. I just sent you something.</p>
-        <p className="consent">Can’t find it? Look in Promotions or spam, and drag it to your inbox so you don’t miss the next one.</p>
+        <p className="signup-note">{isNew ? "Check your inbox for a note from me." : "Thanks for being here."}</p>
       </div>
     );
   }
@@ -99,7 +108,7 @@ export function EmailSignup({
           {status === "submitting" ? "One second…" : buttonLabel}
         </button>
       </form>
-      <p className="consent">Occasional emails from Mace. Leave whenever you want.</p>
+      <p className="consent">Occasional emails from Mace. Unsubscribe anytime. <a href="/privacy">Privacy</a></p>
       <p className={`form-message form-${status}`} aria-live="polite">{message}</p>
     </div>
   );

@@ -47,7 +47,7 @@ function PresaveState() {
         <RevealHeading lines={[{ text: "Who Be" }, { text: "Dat Girl?", em: true }]} />
         <p className="hero-line lyric">“{currentRelease.lyric}”</p>
         {currentRelease.presaveUrl ? (
-          <a className="primary-action" href={currentRelease.presaveUrl} target="_blank" rel="noopener noreferrer">Pre-save WBDG</a>
+          <a className="primary-action" href={currentRelease.presaveUrl} data-track="presave_click" data-platform="Ditto" data-location="release_hero" target="_blank" rel="noopener noreferrer">Pre-save WBDG</a>
         ) : (
           <span className="primary-action action-pending" aria-disabled="true">Pre-save link coming soon</span>
         )}
@@ -69,7 +69,7 @@ function ReleasedState() {
           {currentRelease.listenLinks.map((service) => {
             const Icon = serviceIcons[service.label as keyof typeof serviceIcons];
             return service.url ? (
-              <a key={service.label} href={service.url} target="_blank" rel="noopener noreferrer">
+              <a key={service.label} href={service.url} data-track="streaming_click" data-platform={service.label} data-location="release_hero" target="_blank" rel="noopener noreferrer">
                 <Icon aria-hidden="true" /><span>{service.label}</span>
               </a>
             ) : (
@@ -95,7 +95,7 @@ const marqueeWords: Record<ReleasePhase, string[]> = {
 
 export function ReleaseExperience({ phase }: { phase: ReleasePhase }) {
   return (
-    <section className={`hero hero-${phase}`} aria-label={`Mace release site: ${phase} phase`}>
+    <section className={`hero hero-${phase}`} data-campaign-phase={phase} aria-label={`Mace release site: ${phase} phase`}>
       <Ambient />
       <div className="hero-grid">
         {phase === "early" && <EarlyState />}

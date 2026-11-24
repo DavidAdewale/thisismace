@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Corben, Questrial } from "next/font/google";
 import Link from "next/link";
-import { site } from "@/content/site";
+import Image from "next/image";
+import { resolveReleasePhase, site } from "@/content/site";
+import { Tracking } from "@/components/tracking";
 import { ProfileLinks } from "@/components/profile-links";
 import { ProfileDialog } from "@/components/profile-dialog";
 import "./globals.css";
@@ -18,15 +20,17 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#120a0f" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={`${corben.variable} ${questrial.variable}`}><body>
+  return <html lang="en" className={`${corben.variable} ${questrial.variable}`}><body data-phase={resolveReleasePhase()}>
     <a className="skip-link" href="#main">Skip to content</a>
     <div className="site-shell">
       <header className="site-header">
-        <Link className="wordmark" href="/" aria-label="Mace home">Mace</Link>
+        <Link className="header-avatar" href="/" aria-label="Mace home">
+          <Image src="/images/mace-avatar.png" width={48} height={48} alt="" unoptimized />
+        </Link>
         <ProfileDialog />
       </header>
       <main id="main">{children}</main>
-      <footer className="site-footer"><ProfileLinks /><span className="copyright">© {new Date().getFullYear()} Mace</span></footer>
+      <footer className="site-footer"><ProfileLinks /><Tracking /><span className="copyright">© {new Date().getFullYear()} Mace</span></footer>
     </div>
   </body></html>;
 }

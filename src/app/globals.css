@@ -51,8 +51,9 @@ body::after {
   display: flex; align-items: center; justify-content: space-between;
   animation: fade-down 1s var(--ease-soft) both;
 }
-.wordmark { font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.2; letter-spacing: .01em; text-decoration: none; transition: color .4s, text-shadow .6s var(--ease-soft); }
-.wordmark:hover { color: var(--blush); text-shadow: 0 0 24px rgba(232,112,142,.55); }
+.header-avatar { display: inline-flex; border-radius: 50%; transition: box-shadow .4s var(--ease-soft); }
+.header-avatar img { display: block; }
+.header-avatar:hover { box-shadow: 0 0 0 2px var(--blush); }
 .profile-jump {
   min-height: 42px; padding: .55rem 1.1rem; display: inline-flex; align-items: center; gap: .5rem;
   border: 1px solid var(--line); border-radius: 999px; background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -96,7 +97,7 @@ h1 {
   font-size: clamp(3rem, 6.4vw, 5.8rem); line-height: 1; letter-spacing: -.035em;
 }
 h1 .line { display: block; position: relative; }
-/* Line 1 sits above the shimmering line 2, so its descenders (the g in "get") never get repainted over on mobile. */
+/* Keep descenders above the gradient's padded line box. */
 h1 .line:first-child { z-index: 2; }
 h1 em { font-style: normal; }
 h1 em .word { padding: 0 .06em .32em 0; margin: 0 -.06em -.32em 0; background: linear-gradient(100deg, var(--blush) 0%, var(--rose) 45%, var(--accent) 90%, var(--amber) 130%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: word-in 1.1s var(--ease-soft) forwards, shimmer 8s ease-in-out 1.5s infinite; animation-delay: calc(.3s + var(--i) * .09s), 1.5s; }
@@ -296,6 +297,9 @@ h1 em .word { padding: 0 .06em .32em 0; margin: 0 -.06em -.32em 0; background: l
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
+  /* Avoid overlapping animated filter and background-clip layers on mobile Safari. */
+  h1 .word, h1 em .word { animation: none; opacity: 1; filter: none; transform: none; }
+  h1 em .word { background-size: 100% 100%; }
   .hero-grid { grid-template-columns: 1fr; gap: 2.2rem; padding-top: 96px; padding-bottom: 5rem; }
   .portrait-stage { order: -1; width: min(78%, 22rem); }
   .hero-released .portrait-stage { width: min(84%, 22rem); }
@@ -307,8 +311,21 @@ h1 em .word { padding: 0 .06em .32em 0; margin: 0 -.06em -.32em 0; background: l
   .portrait-stage { margin-bottom: 1.5rem; }
   .orb-1 { width: 90vw; height: 90vw; } .orb-2 { width: 80vw; height: 80vw; }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  h1 .word, h1 em .word { animation: none; opacity: 1; filter: none; transform: none; }
+  h1 em .word { background-size: 100% 100%; }
+}
+
+.site-privacy { display: flex; align-items: center; gap: 1rem; font-size: .875rem; }
+.site-privacy button { color: inherit; background: transparent; border: 0; padding: .4rem 0; cursor: pointer; text-decoration: underline; }
+.cookie-panel { position: fixed; z-index: 55; bottom: 1rem; right: 1rem; width: min(23rem, calc(100vw - 2rem)); padding: 1rem; border: 1px solid var(--line); border-radius: 18px; background: var(--night-2); color: var(--cream); box-shadow: 0 10px 40px #0009; }
+.cookie-panel label { display: block; margin-top: .6rem; }
+.cookie-panel > div { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+.privacy-copy { max-width: 42rem; }
+.privacy-copy p + p { margin-top: 1rem; }
 @media (max-width: 560px) {
-  .site-header { height: 72px; } .wordmark { font-size: 1.45rem; }
+  .site-header { height: 72px; }
   .profile-jump { padding-inline: .9rem; font-size: .75rem; }
   h1 { font-size: clamp(2.5rem, 12vw, 3.5rem); margin-block: 1.1rem .9rem; }
   .signup { padding: 1.1rem; }

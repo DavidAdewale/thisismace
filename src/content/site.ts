@@ -29,10 +29,10 @@ export const currentRelease = {
   artwork: { src: "/images/wbdg-cover.jpg", alt: "Who Be Dat Girl? cover art: Mace in blue sunglasses, hand raised to his face" },
   presaveUrl: process.env.NEXT_PUBLIC_DITTO_PRESAVE_URL ?? null,
   listenLinks: [
-    { label: "Spotify", url: null },
-    { label: "Apple Music", url: null },
-    { label: "Audiomack", url: null },
-    { label: "YouTube", url: null },
+    { label: "Spotify", url: process.env.RELEASE_SPOTIFY_URL || null },
+    { label: "Apple Music", url: process.env.RELEASE_APPLE_MUSIC_URL || null },
+    { label: "Audiomack", url: process.env.RELEASE_AUDIOMACK_URL || null },
+    { label: "YouTube", url: process.env.RELEASE_YOUTUBE_URL || null },
   ],
 };
 

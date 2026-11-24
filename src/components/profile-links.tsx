@@ -35,7 +35,7 @@ export function ProfileLinks() {
       {profiles.map(profile => {
         const Icon = profileIcons[profile.label as keyof typeof profileIcons];
         return profile.url ? (
-          <a className={profileClassNames[profile.label]} key={profile.label} href={profile.url} target="_blank" rel="noopener noreferrer" aria-label={`${profile.label} (opens in a new tab)`} title={profile.label}>
+          <a className={profileClassNames[profile.label]} key={profile.label} href={profile.url} data-track={profile.group === "social" ? "social_click" : "streaming_click"} data-platform={profile.label} data-location="footer" target="_blank" rel="noopener noreferrer" aria-label={`${profile.label} (opens in a new tab)`} title={profile.label}>
             <Icon aria-hidden="true" />
           </a>
         ) : (
