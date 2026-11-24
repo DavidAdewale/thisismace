@@ -6,7 +6,7 @@ import {
 } from "react-icons/si";
 import { Ambient, RevealHeading } from "@/components/ambient";
 import { EmailSignup } from "@/components/email-signup";
-import { PortraitRotator, Sleeve } from "@/components/hero-portrait";
+import { Portrait, Sleeve } from "@/components/hero-portrait";
 import { currentRelease, phasePhotos, type ReleasePhase } from "@/content/site";
 
 const serviceIcons = {
@@ -34,7 +34,7 @@ function EarlyState() {
         <p className="hero-line">I&apos;m only just getting started.</p>
         <EmailSignup source="early" heading="Want the first clue?" buttonLabel="Keep me close" note="No noise. Just the good stuff." />
       </div>
-      <PortraitRotator photos={phasePhotos.early} chip="Something’s coming" />
+      <Portrait photo={phasePhotos.early} chip="Something’s coming" badge="Mace world • Lagos to everywhere • " />
     </>
   );
 }
@@ -53,7 +53,7 @@ function PresaveState() {
         )}
         <EmailSignup source="presave" heading="Rather hear it from me?" buttonLabel="Tell me when it drops" />
       </div>
-      <PortraitRotator photos={phasePhotos.presave} chip="WBDG · 12.02.27" />
+      <Portrait photo={phasePhotos.presave} chip="WBDG · 12.02.27" badge="Mace world • Who Be Dat Girl? • " />
     </>
   );
 }
@@ -81,12 +81,17 @@ function ReleasedState() {
         </nav>
         <EmailSignup source="released" heading="Stay close." buttonLabel="Let me in" note="There’s more after this." />
       </div>
-      <Sleeve artwork={currentRelease.artwork} />
+      <Sleeve artwork={currentRelease.artwork} badge="Out now • Who Be Dat Girl? • " />
     </>
   );
 }
 
-const marqueeWords = ["Mace world", "Who Be Dat Girl?", "Lagos to everywhere", "Good music loading"];
+// The song title only appears once pre-save has started.
+const marqueeWords: Record<ReleasePhase, string[]> = {
+  early: ["Mace world", "Something’s coming", "Lagos to everywhere", "Good music loading"],
+  presave: ["Mace world", "Who Be Dat Girl?", "Lagos to everywhere", "12.02.27"],
+  released: ["Mace world", "Who Be Dat Girl?", "Lagos to everywhere", "Out now"],
+};
 
 export function ReleaseExperience({ phase }: { phase: ReleasePhase }) {
   return (
@@ -98,7 +103,7 @@ export function ReleaseExperience({ phase }: { phase: ReleasePhase }) {
         {phase === "released" && <ReleasedState />}
       </div>
       <div className="marquee" aria-hidden="true">
-        <div>{[...marqueeWords, ...marqueeWords, ...marqueeWords, ...marqueeWords].map((w, i) => <span key={i}>{w}</span>)}</div>
+        <div>{Array.from({ length: 4 }, () => marqueeWords[phase]).flat().map((w, i) => <span key={i}>{w}</span>)}</div>
       </div>
     </section>
   );

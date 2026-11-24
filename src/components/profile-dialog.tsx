@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { FiArrowUpRight, FiX } from "react-icons/fi";
-import { profiles } from "@/content/site";
+import { profiles } from "@/content/profiles";
 import { profileClassNames, profileIcons } from "@/components/profile-links";
 
 const groups = [

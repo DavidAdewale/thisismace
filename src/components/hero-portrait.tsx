@@ -1,10 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { Photo } from "@/content/site";
 
-const ROTATE_MS = 5500;
 
 function usePointerParallax() {
   const ref = useRef<HTMLDivElement>(null);
@@ -39,49 +38,22 @@ function Badge({ label }: { label: string }) {
   );
 }
 
-export function PortraitRotator({ photos, chip }: { photos: Photo[]; chip: string }) {
+// One photo for now: unreleased shots stay private until they're dropped.
+export function Portrait({ photo, chip, badge }: { photo: Photo; chip: string; badge: string }) {
   const ref = usePointerParallax();
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || photos.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = window.setInterval(() => setActive((n) => (n + 1) % photos.length), ROTATE_MS);
-    return () => window.clearInterval(id);
-  }, [paused, photos.length]);
-
   return (
-    <div className="portrait-stage" ref={ref} onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
+    <div className="portrait-stage" ref={ref}>
       <div className="portrait-glow" aria-hidden="true" />
       <div className="portrait">
-        {photos.map((photo, i) => (
-          <Image
-            key={photo.src}
-            src={photo.src}
-            alt={i === active ? photo.alt : ""}
-            aria-hidden={i !== active}
-            fill
-            sizes="(max-width: 900px) 78vw, 480px"
-            preload={i === 0}
-            className={i === active ? "is-active" : undefined}
-            style={{ objectPosition: photo.position }}
-          />
-        ))}
+        <Image src={photo.src} alt={photo.alt} fill sizes="(max-width: 900px) 78vw, 480px" preload className="is-active" style={{ objectPosition: photo.position }} />
       </div>
-      {photos.length > 1 && (
-        <div className="portrait-dots" role="group" aria-label="Choose photo">
-          {photos.map((photo, i) => (
-            <button key={photo.src} type="button" aria-label={`Show photo ${i + 1} of ${photos.length}`} aria-pressed={i === active} onClick={() => setActive(i)} />
-          ))}
-        </div>
-      )}
-      <Badge label="Mace world • Lagos to everywhere • " />
+      <Badge label={badge} />
       <p className="chip">{chip}</p>
     </div>
   );
 }
 
-export function Sleeve({ artwork }: { artwork: Photo }) {
+export function Sleeve({ artwork, badge }: { artwork: Photo; badge: string }) {
   const ref = usePointerParallax();
   return (
     <div className="portrait-stage" ref={ref}>
@@ -92,7 +64,7 @@ export function Sleeve({ artwork }: { artwork: Photo }) {
           <Image src={artwork.src} alt={artwork.alt} fill sizes="(max-width: 900px) 72vw, 420px" preload />
         </div>
       </div>
-      <Badge label="Out now • Who Be Dat Girl? • " />
+      <Badge label={badge} />
     </div>
   );
 }

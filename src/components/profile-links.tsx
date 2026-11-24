@@ -1,4 +1,4 @@
-import { profiles } from "@/content/site";
+import { profiles } from "@/content/profiles";
 import {
   SiApplemusic,
   SiAudiomack,

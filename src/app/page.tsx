@@ -1,9 +1,9 @@
-import { PhasePreview } from "@/components/phase-preview";
+import { connection } from "next/server";
 import { ReleaseExperience } from "@/components/release-experience";
 import { resolveReleasePhase } from "@/content/site";
 
-export default async function Home({ searchParams }: PageProps<"/">) {
-  const phaseParam = (await searchParams).phase;
-  const phase = resolveReleasePhase(typeof phaseParam === "string" ? phaseParam : undefined);
-  return <><ReleaseExperience phase={phase} /><PhasePreview active={phase} /></>;
+export default async function Home() {
+  // Render per request so the page switches phase on schedule, without a rebuild.
+  await connection();
+  return <ReleaseExperience phase={resolveReleasePhase()} />;
 }
