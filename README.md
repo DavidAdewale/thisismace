@@ -1,4 +1,4 @@
-# Mace / realmaceworld
+# Mace / thisismace
 
 Local pre-release foundation built with Next.js App Router, TypeScript and plain CSS. No domain, deployment, analytics, signup service or paid dependencies configured.
 
@@ -13,9 +13,11 @@ Open the Local URL printed by Next.js. `npm run build` checks the production bui
 
 ## Editing
 
-- `src/app/globals.css`: semantic colour, typography, spacing and layout tokens in `:root`.
-- `src/content/site.ts`: shared artist, Circle and current release content.
-- `src/components/artwork.tsx`: reusable photo area. Set `currentRelease.artwork` to `{ src: "/images/filename.jpg", alt: "Meaningful description" }` after putting a photo in `public/images/`.
+- `src/app/globals.css`: design tokens in `:root` (late-night palette, phase accents, motion easing) plus all styling and animations. Reduced-motion users get a still version.
+- `src/app/layout.tsx`: fonts (Instrument Serif for headlines, Manrope for body) and the site shell.
+- `src/content/site.ts`: shared artist, release content, and `phasePhotos` (the portraits that rotate in the hero for each phase) and `quietPhotos` (Circle and 404).
+- `src/components/hero-portrait.tsx`: arched rotating portrait with pointer parallax, and the released-phase sleeve with vinyl.
+- `src/components/ambient.tsx`: drifting background light and the word-by-word headline reveal.
 - `src/app/page.tsx`: homepage.
 - `src/app/music/wbdg/page.tsx`: pre-release story.
 - `src/app/circle/page.tsx`: Circle invitation, explicitly inactive until signup is configured.
@@ -32,3 +34,19 @@ Open the Local URL printed by Next.js. `npm run build` checks the production bui
 ## Next steps
 
 Add photography, revise copy and visual direction, agree the pre-release invitation, then connect MailerLite. Store future secrets in `.env.local`, never client code or Git. No email data is currently collected. Remove the layout’s noindex metadata only when approved for public launch. Keep future eras as separate content records with stable URLs and the shared site shell.
+
+## Release phases
+
+The homepage now resolves one of three states from `src/content/site.ts`:
+
+- `early`: a minimal signal and email invitation. This is the public state from 1 December 2026.
+- `presave`: WBDG title, 12 February 2027 date, Ditto pre-save action and email alternative. It is currently scheduled for 15 January 2027; change `presaveStarts` when the campaign date is confirmed.
+- `released`: listening-service links and a continuing email invitation. It begins automatically at midnight Lagos time on 12 February 2027.
+
+In development, use the on-screen phase switcher or `?phase=early`, `?phase=presave`, and `?phase=released`. Production ignores query-string overrides. `SITE_PHASE_OVERRIDE` can force any phase when operational control is needed.
+
+Copy `.env.example` to `.env.local` and add `MAILERLITE_API_TOKEN` plus `MAILERLITE_GROUP_ID` before opening email signup. The token stays server-side. Add `NEXT_PUBLIC_DITTO_PRESAVE_URL` after Ditto creates the WBDG SmartLink. Add verified DSP URLs to `currentRelease.listenLinks` before release day.
+
+## Pre-release restraint
+
+Homepage is a compact teaser: name, title, one lyric and profile area. No biography, interview content, repeated invitations or acoustic offer. Circle remains off the main navigation until ready. Profile URLs are null until supplied and verified; labels are visibly inactive, not fake links. Edit `profiles` in `src/content/site.ts` to connect them. Shared `ReleaseTeaser` powers home and the stable WBDG route. Theme variables remain in `globals.css`.
