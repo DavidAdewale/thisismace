@@ -5,7 +5,6 @@ import { ReleaseExperience } from "@/components/release-experience";
 import { currentRelease, resolveReleasePhase } from "@/content/site";
 
 // This URL names the song, so it doesn't exist until pre-save begins.
-// Rendered per request so it appears on schedule, without a rebuild.
 export async function generateMetadata(): Promise<Metadata> {
   await connection();
   return resolveReleasePhase() === "early" ? {} : { title: currentRelease.title };

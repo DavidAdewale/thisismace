@@ -40,10 +40,10 @@ Add photography, revise copy and visual direction, agree the pre-release invitat
 The homepage now resolves one of three states from `src/content/site.ts`:
 
 - `early`: a minimal signal and email invitation. This is the public state from 1 December 2026.
-- `presave`: WBDG title, 12 February 2027 date, Ditto pre-save action and email alternative. It is currently scheduled for 15 January 2027; change `presaveStarts` when the campaign date is confirmed.
-- `released`: listening-service links and a continuing email invitation. It begins automatically at midnight Lagos time on 12 February 2027.
+- `presave`: WBDG title, 12 February 2027 date, Ditto pre-save action and email alternative.
+- `released`: listening-service links and a continuing email invitation.
 
-Visitors can't switch phases: there is no on-screen switcher and no `?phase=` override. To preview another phase locally, set `SITE_PHASE_OVERRIDE=presave` (or `released`) in `.env.local` and restart `npm run dev`; remove it afterwards. The song title, `/music/wbdg` and its page title stay hidden until the presave phase.
+The site is set to `early`. To switch or preview a phase, change the return value of `resolveReleasePhase()` in `src/content/site.ts`. Deploy that code change when the next phase is ready. The song title, `/music/wbdg` and its page title stay hidden in Early.
 
 Copy `.env.example` to `.env.local` and add `MAILERLITE_API_TOKEN` plus `MAILERLITE_GROUP_ID` before opening email signup. The token stays server-side. Add `NEXT_PUBLIC_DITTO_PRESAVE_URL` after Ditto creates the WBDG SmartLink. Add verified DSP URLs to `currentRelease.listenLinks` before release day.
 

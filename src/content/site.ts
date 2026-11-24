@@ -5,20 +5,8 @@ export const site = {
 
 export type ReleasePhase = "early" | "presave" | "released";
 
-export const releaseSchedule = {
-  presaveStarts: "2027-01-15T00:00:00+01:00",
-  releases: "2027-02-12T00:00:00+01:00",
-};
-
-// Visitors can't choose a phase. It follows the schedule; only SITE_PHASE_OVERRIDE
-// (set on the server, e.g. in .env.local for local testing) can force one.
+// Change this to "presave" or "released" when that design is ready to go live.
 export function resolveReleasePhase(): ReleasePhase {
-  const valid = (value?: string): value is ReleasePhase => value === "early" || value === "presave" || value === "released";
-  if (valid(process.env.SITE_PHASE_OVERRIDE)) return process.env.SITE_PHASE_OVERRIDE;
-
-  const now = Date.now();
-  if (now >= new Date(releaseSchedule.releases).getTime()) return "released";
-  if (now >= new Date(releaseSchedule.presaveStarts).getTime()) return "presave";
   return "early";
 }
 
