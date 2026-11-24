@@ -3,6 +3,7 @@ import { Corben, Questrial } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 import { resolveReleasePhase, site } from "@/content/site";
+import { siteOrigin } from "@/content/seo";
 import { Tracking } from "@/components/tracking";
 import { ProfileLinks } from "@/components/profile-links";
 import { ProfileDialog } from "@/components/profile-dialog";
@@ -12,6 +13,7 @@ const corben = Corben({ subsets: ["latin"], weight: ["400", "700"], variable: "-
 const questrial = Questrial({ subsets: ["latin"], weight: "400", variable: "--font-questrial" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteOrigin),
   title: { default: "Mace", template: "%s | Mace" },
   description: site.description,
   robots: { index: false, follow: false },

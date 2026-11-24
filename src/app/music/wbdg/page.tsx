@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { ReleaseExperience } from "@/components/release-experience";
-import { currentRelease, resolveReleasePhase } from "@/content/site";
+import { resolveReleasePhase } from "@/content/site";
+import { releaseMetadata } from "@/content/seo";
 
 // This URL names the song, so it doesn't exist until pre-save begins.
 export async function generateMetadata(): Promise<Metadata> {
   await connection();
-  return resolveReleasePhase() === "early" ? {} : { title: currentRelease.title };
+  const phase = resolveReleasePhase();
+  return phase === "early" ? {} : releaseMetadata(phase);
 }
 
 export default async function ReleasePage() {

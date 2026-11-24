@@ -1,6 +1,6 @@
 export const site = {
   name: "Mace",
-  description: "The beginning of Mace.",
+  description: "Official website of Mace, a Nigerian singer, songwriter and producer blending Afrobeats and R&B. Discover his music, exclusive updates and more.",
 };
 
 export type ReleasePhase = "early" | "presave" | "released";
@@ -13,6 +13,7 @@ export function resolveReleasePhase(): ReleasePhase {
 export const currentRelease = {
   slug: "wbdg",
   title: "Who Be Dat Girl?",
+  releaseDate: "2027-02-12",
   lyric: "I think she belongs in my memories.",
   artwork: { src: "/images/wbdg-cover.jpg", alt: "Who Be Dat Girl? cover art: Mace in blue sunglasses, hand raised to his face" },
   presaveUrl: process.env.NEXT_PUBLIC_DITTO_PRESAVE_URL ?? null,
