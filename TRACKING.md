@@ -25,7 +25,7 @@ GA4 uses the requested event names. Meta maps page views and signups to PageView
 
 ## Social bio links
 
-Use `/ig`, `/tt`, `/x`, `/yt` and `/snap` on thisismace.com. Each temporarily redirects to the homepage with the platform as `utm_source`, plus `utm_medium=organic_social`, `utm_content=bio`, and `utm_campaign=artist_warmup` by default.
+Use `/ig`, `/tt`, `/x`, `/yt`, `/snap` and `/threads` on thisismace.com. Each temporarily redirects to the homepage with the platform as `utm_source`, plus `utm_medium=organic_social`, `utm_content=bio`, and `utm_campaign=artist_warmup` by default.
 
 To switch campaigns, set the server-side `SOCIAL_BIO_CAMPAIGN` in Vercel Production and redeploy. Use a campaign label such as `wbdg_release`. The short URLs stay the same. Valid `utm_id`, `utm_term`, `fbclid` and `ttclid` carry through. The redirect sets its four primary UTM values and drops unrelated parameters.
 

@@ -40,7 +40,21 @@ function script(src: string) {
   document.head.append(tag);
 }
 
-function initGoogle(id: string) {
+function googleCampaign(tags: Record<string, string>) {
+  const query = new URLSearchParams(tags).toString();
+  return {
+    campaign_id: tags.utm_id,
+    campaign_source: tags.utm_source,
+    campaign_medium: tags.utm_medium,
+    campaign_name: tags.utm_campaign,
+    campaign_content: tags.utm_content,
+    campaign_term: tags.utm_term,
+    page_location: location.origin + location.pathname + (query ? "?" + query : ""),
+    page_referrer: "",
+  };
+}
+
+function initGoogle(id: string, tags: Record<string, string>) {
   const win = window as Window & { dataLayer?: unknown[]; gtag?: Command };
   const layer = win.dataLayer ??= [];
   google = win.gtag = function () {
@@ -53,8 +67,7 @@ function initGoogle(id: string) {
     send_page_view: false,
     allow_google_signals: false,
     allow_ad_personalization_signals: false,
-    page_location: location.origin + location.pathname,
-    page_referrer: "",
+    ...googleCampaign(tags),
   });
   script("https://www.googletagmanager.com/gtag/js?id=" + id);
 }
@@ -121,15 +134,10 @@ export function signupAttribution() {
 
 function emit(name: EventName, extra: Record<string, string> = {}) {
   if (!choice || !enabled()) return;
-  const pageLocation = location.origin + location.pathname;
   const tags = signupAttribution();
   const data = { ...tags, campaign_phase: phase(), ...extra };
   if (choice.analytics && ga && google && (name !== "page_view" || !viewed.has("ga"))) {
-    const campaign = {
-      campaign_id: tags.utm_id, campaign_source: tags.utm_source, campaign_medium: tags.utm_medium,
-      campaign_name: tags.utm_campaign, campaign_content: tags.utm_content, campaign_term: tags.utm_term,
-    };
-    google("event", name, { ...data, ...campaign, send_to: ga, page_location: pageLocation, page_referrer: "" });
+    google("event", name, { ...data, ...googleCampaign(tags), send_to: ga });
     if (name === "page_view") viewed.add("ga");
   }
   // Pixel SDKs can read the current URL themselves. Skip URLs carrying arbitrary values.
@@ -159,6 +167,7 @@ function sync() {
   const params = new URLSearchParams(location.search);
   const incoming = campaignAttribution((key) => params.get(key));
   if (Object.keys(incoming).length) attribution = incoming;
+  let attributionStored = false;
   if (choice?.analytics || choice?.advertising) {
     try {
       if (!Object.keys(attribution).length) {
@@ -166,12 +175,13 @@ function sync() {
         attribution = campaignAttribution((key) => saved?.[key]);
       }
       sessionStorage.setItem(attributionKey, JSON.stringify(attribution));
+      attributionStored = true;
     } catch { /* Storage may be blocked. */ }
   }
   if (!enabled()) return;
-  if (choice?.analytics && ga && !google) initGoogle(ga);
+  if (choice?.analytics && ga && !google) initGoogle(ga, attribution);
   const entries = [...params.entries()];
-  if (choice?.advertising && (meta || tiktok) && Object.keys(incoming).length) {
+  if (choice?.advertising && (meta || tiktok) && attributionStored && Object.keys(incoming).length) {
     // Preserve ad click IDs while removing campaign labels from automatic URL collection.
     for (const [key, value] of entries) {
       if (incoming[key] === value) params.delete(key, value);
