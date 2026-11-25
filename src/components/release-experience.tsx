@@ -35,7 +35,6 @@ function EarlyState() {
         <Eyebrow>You found me early</Eyebrow>
         <RevealHeading lines={[{ text: "Don’t get" }, { text: "too comfy.", em: true }]} />
         <p className="hero-line">I&apos;m only just getting started.</p>
-        <p className="artist-intro">I’m Mace, a Nigerian singer, songwriter and producer. Afrobeats, Afro-Pop and R&amp;B. Lagos lover boy music.</p>
         <EmailSignup source="early" heading="Want the first clue?" buttonLabel="Keep me close" note="No noise. Just the good stuff." />
       </div>
       <Portrait photo={phasePhotos.early} chip="Something’s coming" badge={stickerText} />
