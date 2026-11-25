@@ -12,7 +12,7 @@ const groups = [
 
 const handles: Record<string, string> = {
   Audiomack: "@realmace",
-  YouTube: "@macepapi",
+  YouTube: "@thisismace",
   Instagram: "@real.mace",
   TikTok: "@real.mace",
   X: "@realmace_",
