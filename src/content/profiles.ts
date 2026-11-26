@@ -9,4 +9,6 @@ export const profiles: { label: string; group: "music" | "social"; url: string |
   { label: "Instagram", group: "social", url: "https://www.instagram.com/real.mace/" },
   { label: "TikTok", group: "social", url: "https://www.tiktok.com/@real.mace" },
   { label: "X", group: "social", url: "https://x.com/realmace_" },
+  { label: "Threads", group: "social", url: "https://www.threads.com/@real.mace" },
+  { label: "Facebook", group: "social", url: "https://www.facebook.com/macepapi/" },
 ];

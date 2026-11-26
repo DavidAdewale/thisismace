@@ -10,14 +10,6 @@ const groups = [
   { key: "social", title: "Follow" },
 ] as const;
 
-const handles: Record<string, string> = {
-  Audiomack: "@realmace",
-  YouTube: "@thisismace",
-  Instagram: "@real.mace",
-  TikTok: "@real.mace",
-  X: "@realmace_",
-};
-
 export function ProfileDialog() {
   const dialog = useRef<HTMLDialogElement>(null);
 
@@ -52,7 +44,7 @@ export function ProfileDialog() {
                     <li key={profile.label} style={{ "--i": i } as React.CSSProperties}>
                       <a className={profileClassNames[profile.label]} href={profile.url!} data-track={profile.group === "social" ? "social_click" : "streaming_click"} data-platform={profile.label} data-location="profile_dialog" target="_blank" rel="noopener noreferrer">
                         <span className="profile-dialog-icon"><Icon aria-hidden="true" /></span>
-                        <span className="profile-dialog-name">{profile.label}{handles[profile.label] && <small>{handles[profile.label]}</small>}</span>
+                        <span className="profile-dialog-name">{profile.label}</span>
                         <FiArrowUpRight className="profile-dialog-arrow" aria-hidden="true" />
                         <span className="sr-only">(opens in a new tab)</span>
                       </a>
